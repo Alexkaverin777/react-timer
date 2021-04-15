@@ -1,0 +1,19 @@
+
+.wrapper-display {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+h1 {
+	text-align: center;
+}
+.displayTimer {
+	&__item {
+		border-radius: 15px;
+		color: #fff;
+		font-size: 24px;
+		background: #0771bc;
+		padding: 15px 15px;
+		margin-right: 10px;
+	}
+}
