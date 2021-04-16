@@ -1,77 +1,78 @@
-import React, {useState, useRef} from 'react'
-// import  {Observable, timer, interval} from 'rxjs'
+import React, {useState} from 'react'
+import {Observable, interval} from 'rxjs'
 import Button from "./Components/Button/Button";
 // import {from} from "rxjs";
 import DisplayTimer from './Components/DisplayTimer/DisplayTimer';
 
 function App() {
-    const [timer, setTimer] = useState({
-        hours: 0,
-        minutes: 0,
-        second: 0
-    });
-    const startBtn = useRef();
-    const [interv, setInterv] = useState();
+	const data = {
+		hours: 0,
+		minutes: 0,
+		second: 0
+	};
+	const [timer, setTimer] = useState(data);
+	const [interv, setInterv] = useState(null);
+	const [isStatus, setIsStatus] = useState(false);
 
-    let updatedSecond = timer.second,
-        updatedMinutes = timer.minutes,
-        updatedHours = timer.hours;
+	let updatedSecond = timer.second,
+		updatedMinutes = timer.minutes,
+		updatedHours = timer.hours;
 
-    const hendlerClick = (e) => {
-        e.target.disabled = true;
-        UpdateTimer();
-        setInterv(setInterval(UpdateTimer, 1000));
-    };
-    const headlerClickStop = () => {
-        startBtn.current.disabled = false;
-        clearInterval(interv);
-    };
-    const headlerClickReset = () => {
-        startBtn.current.disabled = false;
-        clearInterval(interv);
-        setTimer({
-            hours: 0,
-            minutes: 0,
-            second: 0});
-    };
-
-    const UpdateTimer = () => {
-        if(updatedMinutes === 60){
-            updatedHours++;
-            updatedMinutes = 0;
+	const hendlerClickStart = (e) => {
+	    setIsStatus(true);
+		if(isStatus === true) {
+            e.target.disabled = true;
         }
-        if(updatedSecond === 60){
-            updatedMinutes++;
-            updatedSecond = 0;
-        }
-        updatedSecond++;
-        return setTimer({ second:updatedSecond, minutes:updatedMinutes, hours:updatedHours});
-    };
-  return (
-    <div className="App">
-      <header className="App-header">
-        <DisplayTimer
-            timer={timer}
-        />
-        <div className="wrapper-btn">
-            <Button
-                btnStart={startBtn}
-                title={'Start'}
-                handleClick={ hendlerClick}
-            />
-            <Button
-                title={'Stop'}
-                handleClick={headlerClickStop}
-            />
-            <Button
-                title={'Reset'}
-                handleClick={headlerClickReset}
-            />
-        </div>
+		UpdateTimer();
+		setInterv(setInterval(UpdateTimer, 1000));
+	};
+	const headlerClickStop = () => {
+        setIsStatus(false);
+		clearInterval(interv);
+	};
+	const headlerClickReset = () => {
+        setIsStatus(false);
+		clearInterval(interv);
+		setTimer(data);
+	};
+	const UpdateTimer = () => {
+		if (updatedMinutes === 60) {
+			updatedHours++;
+			updatedMinutes = 0;
+		}
+		if (updatedSecond === 60) {
+			updatedMinutes++;
+			updatedSecond = 0;
+		}
+		updatedSecond++;
+		return setTimer({second: updatedSecond, minutes: updatedMinutes, hours: updatedHours});
+	};
+	return (
+		<div className="App">
+			<header className="App-header">
+				<DisplayTimer
+					timer={timer}
+				/>
+				<div className="wrapper-btn">
+					{(isStatus === false) ?
+						<Button
+							title={'Start'}
+							handleClick={hendlerClickStart}
+						/> : <button disabled className='btn'>Start</button>
+					}
+					<Button
+						title={'Stop'}
+						handleClick={headlerClickStop}
+					/>
+					<Button
+						title={'Reset'}
+						handleClick={headlerClickReset}
+					/>
+				</div>
 
-      </header>
-    </div>
-  );
+			</header>
+		</div>
+	);
 }
 
 export default App;
