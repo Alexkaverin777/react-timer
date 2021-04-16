@@ -20,9 +20,6 @@ function App() {
 
 	const hendlerClickStart = (e) => {
 	    setIsStatus(true);
-		if(isStatus === true) {
-            e.target.disabled = true;
-        }
 		UpdateTimer();
 		setInterv(setInterval(UpdateTimer, 1000));
 	};
